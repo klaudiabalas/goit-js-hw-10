@@ -1,4 +1,4 @@
-import { fetchBreeds, fetchCatByBreed } from './cat-api';
+import { fetchBreeds, fetchCat } from './cat-api';
 
 const selectBreed = document.querySelector('.breed-select');
 const catInfo = document.querySelector('.cat-info');
@@ -23,7 +23,7 @@ function renderSelect(breeds) {
 
 selectBreed.addEventListener('change', e => {
   loader.classList.remove('hidden');
-  fetchCatByBreed(e.target.value).then(data => renderCat(data[0]));
+  fetchCat(e.target.value).then(data => renderCat(data[0]));
 });
 
 function renderCat(catData) {
