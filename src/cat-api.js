@@ -6,7 +6,6 @@ export const fetchBreeds = () => {
 
   axios.get(`https://api.thecatapi.com/v1/breeds`).then(res => res.data);
 };
-
 export const fetchCat = breedId => {
   return axios
     .get(`https://api.thecatapi.com/v1/images/search?breed_ids=${breedId}`)
