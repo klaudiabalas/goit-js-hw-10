@@ -33,7 +33,7 @@ function renderCat(catData) {
     'beforeend',
     `<div>
           <h2>${name}</h2>
-          <img src="${url}" alt="${name}" />
+          <img class="image" src="${url}" alt="${name}" />
           <p>${description}</p>
           <p><strong>Temperament:</strong> ${temperament}</p>
       </div>`
