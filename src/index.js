@@ -17,7 +17,7 @@ function renderSelect(breeds) {
       return `<option value="${id}">${name}</option>`;
     })
     .join('');
-  breedSelect.insertAdjacentHTML('beforeend', markup);
+  selectBreed.insertAdjacentHTML('beforeend', markup);
   loader.classList.add('hidden');
 }
 
