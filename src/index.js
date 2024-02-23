@@ -8,13 +8,7 @@ const loader = document.querySelector('.loader');
 const errorInfo = document.querySelector('.error');
 
 loader.classList.add('hidden');
-
-try {
-  loader.classList.remove('hidden');
-  fetchBreeds().then(data => renderSelect(data));
-} catch (error) {
-  console.log(error);
-}
+errorInfo.classList.add('hidden');
 
 function renderSelect(breeds) {
   if (typeof breeds == 'object') {
@@ -32,20 +26,11 @@ function renderSelect(breeds) {
   }
 }
 
-selectBreed.addEventListener('change', e => {
-  loader.classList.remove('hidden');
-  catInfo.classList.remove('hidden');
-  try {
-    fetchCat(e.target.value).then(data => renderCat(data[0]));
-  } catch (error) {
-    console.log(error);
-  }
-});
-
-const infoCat = dataCat => {
-  if (dataCat != undefined) {
+async function renderCat(catData) {
+  if (catData) {
     const { url } = catData;
     const { description, name, temperament } = catData.breeds[0];
+
     catInfo.replaceChildren();
     catInfo.classList.remove('hidden');
     catInfo.insertAdjacentHTML(
@@ -62,10 +47,26 @@ const infoCat = dataCat => {
     loader.classList.add('hidden');
   } else {
     loader.classList.add('hidden');
+    catInfo.classList.add('hidden');
     Notiflix.Report.failure(
-      'Search error.',
-      'No description of this cat breed has been found. Please select a different breed.',
-      'Ok'
+      `ERROR`,
+      'Please select a different breed. No description of this cat breed has been found.'
     );
   }
-};
+}
+
+try {
+  fetchBreeds().then(data => renderSelect(data));
+} catch (error) {
+  console.log(error);
+}
+
+selectBreed.addEventListener('change', e => {
+  loader.classList.remove('hidden');
+  catInfo.classList.remove('hidden');
+  try {
+    fetchCat(e.target.value).then(data => renderCat(data[0]));
+  } catch (error) {
+    console.log(error);
+  }
+});
