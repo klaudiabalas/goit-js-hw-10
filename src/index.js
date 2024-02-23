@@ -1,8 +1,13 @@
+import Notiflix from 'notiflix';
+
 import { fetchBreeds, fetchCat } from './cat-api';
 
 const selectBreed = document.querySelector('.breed-select');
 const catInfo = document.querySelector('.cat-info');
 const loader = document.querySelector('.loader');
+const errorInfo = document.querySelector('.error');
+
+loader.classList.add('hidden');
 
 try {
   loader.classList.remove('hidden');
@@ -29,16 +34,23 @@ function renderSelect(breeds) {
 
 selectBreed.addEventListener('change', e => {
   loader.classList.remove('hidden');
-  fetchCat(e.target.value).then(data => renderCat(data[0]));
+  catInfo.classList.remove('hidden');
+  try {
+    fetchCat(e.target.value).then(data => renderCat(data[0]));
+  } catch (error) {
+    console.log(error);
+  }
 });
 
-function renderCat(catData) {
-  const { url } = catData;
-  const { description, name, temperament } = catData.breeds[0];
-  catInfo.replaceChildren();
-  catInfo.insertAdjacentHTML(
-    'beforeend',
-    `<div>
+const infoCat = dataCat => {
+  if (dataCat != undefined) {
+    const { url } = catData;
+    const { description, name, temperament } = catData.breeds[0];
+    catInfo.replaceChildren();
+    catInfo.classList.remove('hidden');
+    catInfo.insertAdjacentHTML(
+      'beforeend',
+      `<div>
           <h2 class="breed-name">${name}</h2>
           <img class="image" src="${url}" alt="${name}" />
           <div class="container">
@@ -46,11 +58,14 @@ function renderCat(catData) {
           <p><strong>Temperament:</strong> ${temperament}</p>
           </div>
       </div>`
-  );
-  loader.classList.add('hidden');
-  try {
-    fetchCatByBreed(changeSelect.target.value).then(data => catInfo(data));
-  } catch (error) {
-    console.log(error);
+    );
+    loader.classList.add('hidden');
+  } else {
+    loader.classList.add('hidden');
+    Notiflix.Report.failure(
+      'Search error.',
+      'No description of this cat breed has been found. Please select a different breed.',
+      'Ok'
+    );
   }
-}
+};
